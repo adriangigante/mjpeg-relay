@@ -100,9 +100,20 @@ class HTTPRequestHandler:
 	def acceptClients(self):
 		while True:
 			clientsock, addr = self.acceptsock.accept()
+			connstream = ssl.wrap_socket(clientsock,
+                             server_side=True,
+                             certfile="cert.pem",
+                             keyfile="cert.pem",
+                     		 ssl_version=ssl.PROTOCOL_SSLv23,
+                             do_handshake_on_connect=False)
+			try:
+			    connstream.do_handshake()
+			except ssl.SSLError, err:
+			    if err.args[1].find("sslv3") == -1:
+			        raise
 
 			if self.kill:
 				clientsock.close()
 				return
-			handlethread = threading.Thread(target = self.handleRequest, args = (clientsock,))
+			handlethread = threading.Thread(target = self.handleRequest, args = (connstream,))
 			handlethread.start()
