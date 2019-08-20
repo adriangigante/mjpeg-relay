@@ -3,6 +3,7 @@ import ssl
 import threading
 import logging
 import re
+import os
 from status import Status
 from streaming import TCPStreamingClient
 from broadcaster import Broadcaster
@@ -103,8 +104,8 @@ class HTTPRequestHandler:
 			clientsock, addr = self.acceptsock.accept()
 			connstream = ssl.wrap_socket(clientsock,
                              server_side=True,
-                             certfile="cert.pem",
-                             keyfile="cert.pem",
+                             certfile=os.environ['SSL_CERT_FILE'],
+                             keyfile=os.environ['SSL_KEY_FILE'],
                      		 ssl_version=ssl.PROTOCOL_SSLv23,
                              do_handshake_on_connect=False)
 			try:
