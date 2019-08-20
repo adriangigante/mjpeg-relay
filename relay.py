@@ -74,4 +74,4 @@ if __name__ == '__main__':
 	requestHandler.start()
 
 	s = SimpleWebSocketServer('', options.wsport, WebSocketStreamingClient)
-	s.serverforever()
+	s.serveforever()
