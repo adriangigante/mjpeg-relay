@@ -74,19 +74,4 @@ if __name__ == '__main__':
 	requestHandler.start()
 
 	s = SimpleWebSocketServer('', options.wsport, WebSocketStreamingClient)
-	webSocketHandlerThread = threading.Thread(target=s.serveforever)
-	webSocketHandlerThread.daemon = True
-	webSocketHandlerThread.start()
-
-	try:
-		while raw_input() != "quit":
-			continue
-		quit()
-	except KeyboardInterrupt:
-		quit()
-	except EOFError:
-		#this exception is raised when ctrl-c is used to close the application on Windows, appears to be thrown twice?
-		try:
-			quit()
-		except KeyboardInterrupt:
-			os._exit(0)
+	s.serverforever()
